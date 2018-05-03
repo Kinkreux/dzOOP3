@@ -4,7 +4,7 @@
 Свойств: 5, все обязательные.
 Категория str, подкатегория str, бренд str, цена в рублях int, размер партии int, осталось на складе int. */
 
-class Product
+abstract class Product
 {
     protected $category; //категория текстом
     protected $subcategory; //категория текстом
@@ -12,6 +12,9 @@ class Product
     protected $price; //цена в рублях int
     protected $stockSize; //Размер партии int
     protected $leftInStock; //осталось на складе int
+
+    use GetPrice; //подключаем трейт с вычислением цены
+    use PrintProduct; //подключаем отображение карточки товара
 
     // конструктор
     public function __construct($category, $subcategory, $brand, $price, $stockSize, $leftInStock)
@@ -60,38 +63,5 @@ class Product
     public function __unset($property)
     {
         echo 'You should not unset protected or private properties.';
-    }
-
-    //расчет цены
-    public function getPrice()
-    {
-        if (isset($this->price)) {
-            return $this->price;
-        } else {
-            echo '<em>- (уточняйте у менеджера)</em>';
-        }
-    }
-
-    // вывести карточку товара
-    public function printProduct()
-    {
-        $category = $this->category;
-        $subcategory = $this->subcategory;
-        $brand = $this->brand;
-        $price = $this->price;
-        $stockSize = $this->stockSize;
-        $leftInStock = $this->leftInStock;
-
-        echo $subcategory . ' из категории ' . $category . ' бренда ' . $brand . ' стоит ' . $price . ' рублей. <br>';
-
-        if ($leftInStock === NULL OR $leftInStock === 0) {
-            echo "Товара нет на складе. Доступен предзаказ - обратитесь к нашему менеджеру! : )";
-        } else {
-            if ($leftInStock <= 0.3 * $stockSize) {
-                echo '<strong>Товар заканчивается на складе!</strong>';
-            } else {
-                echo 'Товар на складе';
-            }
-        }
     }
 }
